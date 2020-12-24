@@ -1,0 +1,107 @@
+variables:
+ GIT_STRATEGY: none
+
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+stages:
+ - build
+ - doc
+ - deploy
+
+ 
+ezjob_build:
+  stage: build
+  image: python:latest
+  tags: [rcc,docker,node-01]
+  before_script:
+     - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+     - apt-get update > /dev/null
+     - apt-get install -qq wget git > /dev/null
+     - apt-get install -qq apt-utils > /dev/null
+     - apt-get install -qq dialog apt-utils -y > /dev/null
+     - apt-get install -qq build-essential > /dev/null
+     - apt-get install -qq pkg-config > /dev/null
+     - apt-get install -qq libpng-dev > /dev/null
+     - apt-get install -qq pandoc > /dev/null
+     - apt-get install -qq texlive-latex-base > /dev/null
+     - apt-get install -qq latex2html > /dev/null
+     - which python
+     - pip install nbsphinx
+     - pip install sphinx_rtd_theme
+     - pip install ipython
+  script:
+     - rm -rf ezjob
+     - git clone -b $CI_COMMIT_REF_NAME $CI_REPOSITORY_URL ezjob
+     - cd ezjob
+     - make
+
+
+
+     
+ezjob_doc_build:
+  stage: doc
+  image: python:latest
+  tags: [rcc,docker,node-01]
+  before_script:
+    - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+    - apt-get update > /dev/null
+    - apt-get install -qq wget git > /dev/null
+    - apt-get install -qq apt-utils > /dev/null
+    - apt-get install -qq dialog apt-utils -y > /dev/null
+    - apt-get install -qq build-essential > /dev/null
+    - apt-get install -qq pkg-config > /dev/null
+    - apt-get install -qq libpng-dev > /dev/null
+    - apt-get install -qq pandoc > /dev/null
+    - apt-get install -qq texlive-latex-base > /dev/null
+    - apt-get install -qq latex2html > /dev/null
+    - which python
+    - pip install nbsphinx
+    - pip install ipython
+    - pip install sphinx sphinx-rtd-theme
+  script:
+    - rm -rf ezjob
+    - git clone -b $CI_COMMIT_REF_NAME $CI_REPOSITORY_URL ezjob
+    - cd ezjob
+    - cd doc
+    - make html
+    - ls _build/html
+  
+
+ 
+pages:
+  stage: deploy
+  image: python:latest
+  tags: [rcc,docker,node-01]
+  before_script:
+    - echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+    - apt-get update > /dev/null
+    - apt-get install -qq wget git > /dev/null
+    - apt-get install -qq apt-utils > /dev/null
+    - apt-get install -qq dialog apt-utils -y > /dev/null
+    - apt-get install -qq build-essential > /dev/null
+    - apt-get install -qq pkg-config > /dev/null
+    - apt-get install -qq libpng-dev > /dev/null
+    - apt-get install -qq pandoc > /dev/null
+    - apt-get install -qq texlive-latex-base > /dev/null
+    - apt-get install -qq latex2html > /dev/null
+    - which python
+    - pip install nbsphinx
+    - pip install ipython
+    - pip install sphinx sphinx-rtd-theme
+  script:
+    - rm -rf ezjob
+    - git clone -b $CI_COMMIT_REF_NAME $CI_REPOSITORY_URL ezjob
+    - cd ezjob
+    - cd doc
+    - make html
+    - mv _build/html $CI_PROJECT_DIR/public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+
+  
+ 

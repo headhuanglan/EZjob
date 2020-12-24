@@ -1,0 +1,6 @@
+include ezjob/*.py
+include ezjob/*.js
+include template/*.ini
+include template/*.sh
+include tutorial/*.ipynb
+include EZjob.png
