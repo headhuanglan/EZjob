@@ -1,7 +1,6 @@
 # EZjob
 
 [![PyPI version](https://badge.fury.io/py/ezjob.svg)](https://badge.fury.io/py/ezjob)
-[![pipeline status](http://greatfire.uchicago.edu/west-lan/ezjob/badges/master/pipeline.svg)](http://greatfire.uchicago.edu/west-lan/ezjob/commits/master)
 
 > **A Swiss army knife of SSH SFTP for IPython/Jupyter notebook.** <br>
 **Get ridge of PuTTY,  MobaXterm once for all. Organize your whole workflow by one jupyter notebook.**<br>
